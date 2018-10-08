@@ -22,7 +22,6 @@ import java.nio.ByteBuffer;
 
 public class RiskyKeepRenderer extends ApplicationAdapter {
     private ModelBatch batch;
-    private SpriteBatch spriteBatch;
     private Camera camera;
     private Texture[] cardImages;
     private Model[] cardModels;
@@ -32,15 +31,11 @@ public class RiskyKeepRenderer extends ApplicationAdapter {
     private float cardPositionY = 0.25f;
     private int frameCounter;
 
-    private String font = "PT_Sans-Web-Regular.ttf";
-    //private String font = "Philosopher-Regular.ttf";
-//    private String font = "Tenali-Ramakrishna.ttf";
-    private BitmapFont bitmapFont;
+    private static final String ASSET_PATH = "/Users/marcin.sciesinski/private/risky-keep/core/assets/";
+    private static final String OUTPUT_PATH = "/Users/marcin.sciesinski/private/risky-keep/core/out/result/";
 
     @Override
     public void create() {
-        spriteBatch = new SpriteBatch();
-        bitmapFont = createFont();
 
         batch = new ModelBatch();
         camera = new PerspectiveCamera(67, 1920, 1080);
@@ -51,13 +46,13 @@ public class RiskyKeepRenderer extends ApplicationAdapter {
 
         cardImages = new Texture[5];
 
-        cardImages[0] = createTexture("/private/risky-keep/core/assets/forest.jpeg");
-        cardImages[1] = createTexture("/private/risky-keep/core/assets/island.jpeg");
-        cardImages[2] = createTexture("/private/risky-keep/core/assets/mountain.jpeg");
-        cardImages[3] = createTexture("/private/risky-keep/core/assets/plains.jpeg");
-        cardImages[4] = createTexture("/private/risky-keep/core/assets/swamp.jpeg");
+        cardImages[0] = createTexture(ASSET_PATH + "forest.jpeg");
+        cardImages[1] = createTexture(ASSET_PATH + "island.jpeg");
+        cardImages[2] = createTexture(ASSET_PATH + "mountain.jpeg");
+        cardImages[3] = createTexture(ASSET_PATH + "plains.jpeg");
+        cardImages[4] = createTexture(ASSET_PATH + "swamp.jpeg");
 
-        cardBack = new Texture(Gdx.files.external("/private/risky-keep/core/assets/magicCardBack.jpeg"), true);
+        cardBack = createTexture(ASSET_PATH + "magicCardBack.jpeg");
 
         cardModels = new Model[cardImages.length];
         for (int i = 0; i < cardModels.length; i++) {
@@ -80,24 +75,8 @@ public class RiskyKeepRenderer extends ApplicationAdapter {
         cards[6].transform.translate(0, cardPositionY, -0.06f);
     }
 
-    private BitmapFont createFont() {
-        FreeTypeFontGenerator freeTypeFontGenerator = new FreeTypeFontGenerator(Gdx.files.external("/private/risky-keep/core/assets/" + font));
-        FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        params.size = 200;
-        params.color = Color.WHITE;
-//        params.borderWidth = 0f;
-//        params.borderColor = Color.GRAY;
-        params.minFilter = Texture.TextureFilter.Linear;
-        params.magFilter = Texture.TextureFilter.Linear;
-
-        BitmapFont font = freeTypeFontGenerator.generateFont(params);
-
-        freeTypeFontGenerator.dispose();
-        return font;
-    }
-
     private Texture createTexture(String path) {
-        return new Texture(Gdx.files.external(path));
+        return new Texture(Gdx.files.absolute(path));
     }
 
     private Model createCard(Texture frontTexture) {
@@ -122,16 +101,11 @@ public class RiskyKeepRenderer extends ApplicationAdapter {
         }
         batch.end();
 
-//        spriteBatch.begin();
-//        bitmapFont.setColor(Color.WHITE);
-//        bitmapFont.draw(spriteBatch, "Risky Keep", 0,1020, 1920, Align.center, false);
-//        spriteBatch.end();
-
         if (frameCounter < 90) {
             String frameName = String.valueOf(frameCounter + 1);
             if (frameName.length() < 2)
                 frameName = "0" + frameName;
-            FileHandle fh = Gdx.files.external("/private/risky-keep/core/assets/result/screen" + frameName + ".png");
+            FileHandle fh = Gdx.files.absolute(OUTPUT_PATH + "screen" + frameName + ".png");
 
             int w = 1920;
             int h = 1080;
@@ -166,12 +140,10 @@ public class RiskyKeepRenderer extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        spriteBatch.dispose();
         batch.dispose();
         for (Texture cardImage : cardImages) {
             cardImage.dispose();
         }
         cardBack.dispose();
-        bitmapFont.dispose();
     }
 }
