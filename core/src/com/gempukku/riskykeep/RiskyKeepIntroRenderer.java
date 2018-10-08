@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.nio.ByteBuffer;
 
-public class RiskyKeepRenderer extends ApplicationAdapter {
+public class RiskyKeepIntroRenderer extends SizedApplicationAdapter {
     private ModelBatch batch;
     private Camera camera;
     private Texture[] cardImages;
@@ -33,6 +33,16 @@ public class RiskyKeepRenderer extends ApplicationAdapter {
 
     private static final String ASSET_PATH = "/Users/marcin.sciesinski/private/risky-keep/core/assets/";
     private static final String OUTPUT_PATH = "/Users/marcin.sciesinski/private/risky-keep/core/out/result/";
+
+    @Override
+    public int getDesiredWidth() {
+        return 1920;
+    }
+
+    @Override
+    public int getDesiredHeight() {
+        return 1080;
+    }
 
     @Override
     public void create() {
